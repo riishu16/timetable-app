@@ -52,12 +52,12 @@ async function initDB() {
         const result = await pool.query('SELECT COUNT(*) FROM timetable');
         if (parseInt(result.rows[0].count) === 0) {
             const samples = [
-                ['Monday', '09:00 - 10:00', 'Mathematics', 'Dr. Smith', 'Room 101', 'CS-A'],
-                ['Monday', '10:00 - 11:00', 'Physics', 'Prof. Johnson', 'Room 102', 'CS-A'],
-                ['Tuesday', '09:00 - 10:00', 'Chemistry', 'Dr. Brown', 'Lab 1', 'CS-A'],
-                ['Wednesday', '11:00 - 12:00', 'English', 'Ms. Davis', 'Room 103', 'CS-A'],
-                ['Thursday', '09:00 - 10:00', 'Computer Science', 'Mr. Lee', 'Lab 2', 'CS-B'],
-                ['Friday', '10:00 - 11:00', 'Biology', 'Dr. Wilson', 'Lab 3', 'CS-B']
+                ['Monday', '09:00 AM - 10:00 AM', 'Mathematics', 'Dr. Smith', 'Room 101', 'CS-A'],
+                ['Monday', '10:00 AM - 11:00 AM', 'Physics', 'Prof. Johnson', 'Room 102', 'CS-A'],
+                ['Tuesday', '09:00 AM - 10:00 AM', 'Chemistry', 'Dr. Brown', 'Lab 1', 'CS-A'],
+                ['Wednesday', '11:00 AM - 12:00 PM', 'English', 'Ms. Davis', 'Room 103', 'CS-A'],
+                ['Thursday', '09:00 AM - 10:00 AM', 'Computer Science', 'Mr. Lee', 'Lab 2', 'CS-B'],
+                ['Friday', '10:00 AM - 11:00 AM', 'Biology', 'Dr. Wilson', 'Lab 3', 'CS-B']
             ];
             for (const s of samples) {
                 await pool.query('INSERT INTO timetable (day, time_slot, subject, teacher, room, class_name) VALUES ($1,$2,$3,$4,$5,$6)', s);
@@ -89,7 +89,7 @@ app.post('/api/logout', (req, res) => {
     res.json({ success: true });
 });
 
-// ===== PUBLIC ROUTES (everyone can view) =====
+// ===== PUBLIC ROUTES =====
 app.get('/api/timetable', async (req, res) => {
     try {
         const result = await pool.query(`SELECT * FROM timetable ${ORDER}`);
@@ -118,7 +118,7 @@ app.get('/api/stats', async (req, res) => {
     } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-// ===== PROTECTED ROUTES (only admin) =====
+// ===== PROTECTED ROUTES =====
 app.post('/api/timetable', requireAdmin, async (req, res) => {
     try {
         const { day, time_slot, subject, teacher, room, class_name } = req.body;
