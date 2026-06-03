@@ -89,7 +89,7 @@ app.post('/api/logout', (req, res) => {
     res.json({ success: true });
 });
 
-// ===== PUBLIC ROUTES =====
+// ===== PUBLIC ROUTES (everyone can view) =====
 app.get('/api/timetable', async (req, res) => {
     try {
         const result = await pool.query(`SELECT * FROM timetable ${ORDER}`);
@@ -118,7 +118,7 @@ app.get('/api/stats', async (req, res) => {
     } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-// ===== PROTECTED ROUTES =====
+// ===== PROTECTED ROUTES (only admin) =====
 app.post('/api/timetable', requireAdmin, async (req, res) => {
     try {
         const { day, time_slot, subject, teacher, room, class_name } = req.body;
